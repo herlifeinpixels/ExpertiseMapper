@@ -1,0 +1,14 @@
+<nodes nbrnodes="12">
+	<node id="000001" depth="0" name="Technology" cata="0" importance="0" />
+	<node id="000002" depth="1" name="Design" cata="1" importance="0" parent="000001"/>
+	<node id="000003" depth="1" name="Programming" cata="2" importance="0" parent="000001"/>
+	<node id="000004" depth="1" name="Management" cata="3" importance="0" parent="000001"/>
+	<node id="000005" depth="1" name="Communications" cata="4" importance="0" parent="000001"/>
+	<node id="000006" depth="2" name="Python" cata="2" importance="4" parent="000003"/>
+	<node id="000007" depth="2" name="Flash" cata="1" importance="1" parent="000002"/>
+	<node id="000008" depth="2" name="ASP.NET" cata="2" importance="1" parent="000003"/>
+	<node id="000009" depth="2" name="Corporate Identity" importance="2" cata="4" parent="000005"/>
+	<node id="000010" depth="2" name="Google Analytics" cata="3" importance="1" parent="000004"/>
+	<node id="000010" depth="2" name="Blogging" cata="4" importance="2" parent="000005"/>
+	<node id="000010" depth="2" name="iOS" cata="2" importance="2" parent="000003"/>
+</nodes>
