@@ -4,7 +4,8 @@ import re
 from collections import defaultdict
 from pprint import pprint
 	
-curr_dir = 'C:\Users\Hannah\Documents\GitHub\ExpertiseMapper'
+#curr_dir = 'C:\Users\Hannah\Documents\GitHub\ExpertiseMapper'
+curr_dir = 'C:\GitHub\ExpertiseMapper'
 
 def main()  :
         # TODO catch IO errors
@@ -24,6 +25,18 @@ def getAllSkills(raw) :
     # d = {'technology': {'importance': 1, 'users': [1 , 2]}, 
     #            'java': {'importance': 3, 'users': [4}}
     
+    #print raw[0][433]
+    #print json.loads(raw[0][0])["user_skill"][0]["skill"]["name"]
+
+    
+    for row in raw :
+        try :
+            print json.loads(raw[row][0])["user_skill"]
+            for s in json.loads(raw[row][0])["user_skill"] :
+                print s["skill"]["name"]
+        except :
+            pass
+    
     return data
 
 # Parse JSON file
@@ -39,7 +52,7 @@ def readfile() :
         i = 0
         
         # Validate 
-        with open(curr_dir + '\Parser\main_skill50.json', 'r') as source:
+        with open(curr_dir + '\Parser\skills_500.json', 'r') as source:
             for line in source:
                 if line.find(user) != -1:
                     #get user id
@@ -47,15 +60,17 @@ def readfile() :
                 elif line.find(skill) != -1:
                     #Clean up escapes
                     #Replace "" with []s
+                    # print line
                     parts = line.replace("\\", "")
-                    parts = parts[0:14] + " [" + parts[16:]
+                    start =  parts.find("user_skill")
+                    parts = parts[:start+12] + " [" + parts[start+14:]
                     parts = parts[0:len(parts)-2] + "}]}"
                     parts = id + parts
-                    #print parts
+                    print parts
+                    break
                     data[i].append(parts)
-                    i = i + 1
             source.close()
-        
+        #print data
         return data
  
         
