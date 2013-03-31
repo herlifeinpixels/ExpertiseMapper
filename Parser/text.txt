@@ -1,0 +1,108 @@
+{
+	"user_id": 1,
+	"user_skill": [{
+		"proficiency": {
+			"name": "Advanced",
+			"level": "advanced"
+		},
+		"skill": {
+			"name": "Java"
+		},
+		"order": 0,
+		"id": 4,
+		"years": {
+			"id": 2,
+			"name": "2"
+		}
+	},
+	{
+		"proficiency": {
+			"name": "Intermediate",
+			"level": "intermediate"
+		},
+		"skill": {
+			"name": "Android"
+		},
+		"order": 1,
+		"id": 5,
+		"years": {
+			"id": 1,
+			"name": "1"
+		}
+	},
+	{
+		"proficiency": {
+			"name": "Intermediate",
+			"level": "intermediate"
+		},
+		"skill": {
+			"name": "ActionScript"
+		},
+		"order": 2,
+		"id": 6,
+		"years": {
+			"id": 3,
+			"name": "3"
+		}
+	},
+	{
+		"proficiency": {
+			"name": "Intermediate",
+			"level": "intermediate"
+		},
+		"skill": {
+			"name": "HTML5"
+		},
+		"order": 3,
+		"id": 7,
+		"years": {
+			"id": 1,
+			"name": "1"
+		}
+	},
+	{
+		"proficiency": {
+			"name": "Advanced",
+			"level": "advanced"
+		},
+		"skill": {
+			"name": "PHP"
+		},
+		"order": 4,
+		"id": 17,
+		"years": {
+			"id": 5,
+			"name": "5"
+		}
+	},
+	{
+		"proficiency": {
+			"name": "Advanced",
+			"level": "advanced"
+		},
+		"skill": {
+			"name": "C#"
+		},
+		"order": 5,
+		"id": 18,
+		"years": {
+			"id": 5,
+			"name": "5"
+		}
+	},
+	{
+		"proficiency": {
+			"name": "Intermediate",
+			"level": "intermediate"
+		},
+		"skill": {
+			"name": "Python"
+		},
+		"order": 6,
+		"id": 51,
+		"years": {
+			"id": 0,
+			"name": "0"
+		}
+	}]
+}
