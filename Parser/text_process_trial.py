@@ -4,8 +4,8 @@ import re
 from collections import defaultdict
 from pprint import pprint
 	
-curr_dir = 'C:\Users\Hannah\Documents\GitHub\ExpertiseMapper'
-#curr_dir = 'C:\GitHub\ExpertiseMapper'
+#curr_dir = 'C:\Users\Hannah\Documents\GitHub\ExpertiseMapper'
+curr_dir = 'C:\GitHub\ExpertiseMapper'
 
 def main()  :
         # TODO catch IO errors
@@ -16,33 +16,39 @@ def main()  :
         # f = open('backup.txt', 'w')
         # f.close()
         
-        # Build skills repository
-        allSkills = getAllSkills(raw)
+        # Users and skills
+        users_and_skills = getAllSkills(raw)
+        print users_and_skills
+        
+        #
 
 # Sort into dictionary of skills        
 def getAllSkills(raw) :
-    data = {}
+    skills = defaultdict(list)
     # d = {'technology': {'importance': 1, 'users': [1 , 2]}, 
     #            'java': {'importance': 3, 'users': [4}}
-    
-    print raw[0]
+
     #print json.loads(raw[0][0])["user_skill"][0]["skill"]["name"]
 
     i = 0
     for row in raw :
         try :
-            print json.loads(raw[row][0])["user_skill"]
-            for s in json.loads(raw[row][0])["user_skill"] :
-                if (s.find("{") == null) :
-                    pass
+            #print json.loads(raw[row][0])["user_skill"]
+            for s in json.loads(raw[row][0])["user_skill"]:
+                if "skill" in s :
+                    skillName = s["skill"]["name"]
+                    skills[json.loads(raw[row][0])["user_id"]].append(skillName)
+                    #skills[skillName].append(json.loads(raw[row][0])["user_id"])
+                    
+                    i+=i
+
                 else :
-                    print s["skill"]["name"]
-                    i = i + 1
+                    pass
         except :
             pass
             
-    print i
-    return data
+    print "total # of skills: " + str(i)
+    return skills
 
 # Parse JSON file
 def readfile() :
@@ -57,7 +63,7 @@ def readfile() :
         i = 0
         
         # Validate 
-        with open(curr_dir + '\Parser\skills_500.json', 'r') as source:
+        with open(curr_dir + '\Parser\skills500.json', 'r') as source:
             for line in source:
                 i = i + 1
                 if line.find(user) != -1:
@@ -68,7 +74,7 @@ def readfile() :
                     #Replace "" with []s
                     # print line
                     parts = line.replace("\\", "")
-                    start =  parts.find("user_skill")
+                    start = parts.find("user_skill")
                     parts = parts[:start+12] + " [" + parts[start+14:]
                     parts = parts[0:len(parts)-2] + "}]}"
                     parts = id + parts
