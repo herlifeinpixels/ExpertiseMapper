@@ -25,29 +25,28 @@ def main()  :
 # Sort into dictionary of skills        
 def getAllSkills(raw) :
     skills = defaultdict(list)
+    num_parsed = 0
     # d = {'technology': {'importance': 1, 'users': [1 , 2]}, 
     #            'java': {'importance': 3, 'users': [4}}
 
     #print json.loads(raw[0][0])["user_skill"][0]["skill"]["name"]
 
-    i = 0
     for row in raw :
         try :
             #print json.loads(raw[row][0])["user_skill"]
             for s in json.loads(raw[row][0])["user_skill"]:
                 if "skill" in s :
+                
                     skillName = s["skill"]["name"]
                     skills[json.loads(raw[row][0])["user_id"]].append(skillName)
-                    #skills[skillName].append(json.loads(raw[row][0])["user_id"])
                     
-                    i+=i
-
+                    num_parsed += 1
                 else :
                     pass
         except :
+            # print raw[row][0]
             pass
-            
-    print "total # of skills: " + str(i)
+    print "total skills: " + str(num_parsed)
     return skills
 
 # Parse JSON file
@@ -60,28 +59,30 @@ def readfile() :
         data = defaultdict(list)
         user = "user_id"
         skill = "user_skill"
-        i = 0
+        num_rows = 0
         
         # Validate 
         with open(curr_dir + '\Parser\skills500.json', 'r') as source:
             for line in source:
-                i = i + 1
                 if line.find(user) != -1:
                     #get user id
                     id = "{" + line
                 elif line.find(skill) != -1:
-                    #Clean up escapes
-                    #Replace "" with []s
-                    # print line
                     parts = line.replace("\\", "")
                     start = parts.find("user_skill")
                     parts = parts[:start+12] + " [" + parts[start+14:]
-                    parts = parts[0:len(parts)-2] + "}]}"
+                    
+                    # Make this smarter
+                    # parts.rfind("\"")
+                    # replace whatever after with "}}]}"
+                    # Some need }]}
+                    indx = parts.rfind('}')
+                    parts = parts[0:indx] + "}]}"
                     parts = id + parts
-
-                    data[i].append(parts)
+                    data[num_rows ].append(parts)
+                    num_rows += 1
             source.close()
+        print "total valid entries: " + str(num_rows)
         return data
- 
-        
+
 main()
