@@ -13,11 +13,12 @@ class Parser:
         self.raw = self.readfile(self.dir, self.raw)
         
         # Users and skills
-        self.userSkills = self.getAllSkills(self.raw)
+        self.userSkills, self.skillsList = self.getAllSkills(self.raw)
 
     # Sort into dictionary of skills        
     def getAllSkills(self, rdata) :
         skills = defaultdict(list)
+        skillsList = []
         num_parsed = 0
 
         #print json.loads(rdata[0][0])["user_skill"][0]["skill"]["name"]
@@ -28,15 +29,25 @@ class Parser:
                     if "skill" in s :
                     
                         skillName = s["skill"]["name"]
+                        # Add to dictionary
                         skills[json.loads(rdata[row][0])["user_id"]].append(skillName)
                         
+                        # Add to list
+                        skillsList.append(skillName)
                         num_parsed += 1
                     else :
                         pass
             except :
                 pass
         print "total skills: " + str(num_parsed)
-        return skills
+        return skills, skillsList
+        
+    # Extract duplicates
+    def getDuplicates(self) :
+        copy = self.skillsList[:]
+        for value in set(copy):
+            copy.remove(value)
+        return copy
 
     # Parse JSON file
     def readfile(self, dir, raw) :
