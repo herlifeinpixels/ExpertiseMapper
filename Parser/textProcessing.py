@@ -47,6 +47,7 @@ class Parser:
         copy = self.skillsList[:]
         for value in set(copy):
             copy.remove(value)
+            
         return copy
 
     # Parse JSON file

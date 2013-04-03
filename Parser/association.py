@@ -1,6 +1,6 @@
 import os, json, re, orange, Orange
 from textProcessing import Parser
-
+from pprint import *
 from collections import defaultdict
 
 def main() :
@@ -10,7 +10,7 @@ def main() :
     filename = 'skillTab.basket'
     
     # filter out all skills that occur below this threshold
-    threshold = 2
+    threshold = 3
     # frequency of association
     sup = 0.015
     
@@ -25,16 +25,20 @@ def main() :
     
     #printRules(rules)
     
-    #populate the graph with nodes
+    #generate node data struct with weights
     generateNodes(skills, threshold)
-    #makes weighted edges between
+    #generate edge data struct with supp and conf from association rules
     #generateEdges(skills, rules)
     
 def generateNodes(s, t) :
-    #seperate get at the duplicate nodes
     
-    dups = s.getDuplicates()
-    print "number of significant skills: " + str(len(dups))
+    # an element is significant when count is above the threshold
+    isSignificant = lambda elm: (elm[1] >= t)
+    # apply threshold to list of elements and their counts
+    counts = filter(isSignificant,[(i, s.skillsList.count(i)) for i in s.skillsList])
+    
+    #print pprint(counts)
+    print "number of significant nodes: " + str(len(counts))
 
 def populateTable(dir, s) :
     #save as tab
