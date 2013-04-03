@@ -9,6 +9,11 @@ def main() :
     raw = 'skills500.json'
     filename = 'skillTab.basket'
     
+    # filter out all skills that occur below this threshold
+    threshold = 2
+    # frequency of association
+    sup = 0.015
+    
     os.chdir(dir)
     skills = Parser(dir, raw)
     
@@ -16,14 +21,20 @@ def main() :
     data = orange.ExampleTable(filename)
     
     # Apply association rules
-    rules = orange.AssociationRulesSparseInducer(data, support = 0.015)
+    rules = orange.AssociationRulesSparseInducer(data, support = sup)
     
-    print "%5s   %5s" % ("supp", "conf")
-    for r in rules:
-        print "%5.3f   %5.3f   %s" % (r.support, r.confidence, r)
+    #printRules(rules)
     
+    #populate the graph with nodes
+    generateNodes(skills, threshold)
     #makes weighted edges between
-    generateEdges(rules)
+    #generateEdges(skills, rules)
+    
+def generateNodes(s, t) :
+    #seperate get at the duplicate nodes
+    
+    dups = s.getDuplicates()
+    print "number of significant skills: " + str(len(dups))
 
 def populateTable(dir, s) :
     #save as tab
@@ -36,5 +47,11 @@ def populateTable(dir, s) :
                 file.write(u)
             else:
                 file.write(u + '\n')
-                
+
+def printRules(rules) :
+
+    print "%5s   %5s" % ("supp", "conf")
+    for r in rules:
+        print "%5.3f   %5.3f   %s" % (r.support, r.confidence, r)
+        
 main()
