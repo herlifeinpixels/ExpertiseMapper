@@ -4,16 +4,16 @@ import networkx as nx
 from pprint import *
 from collections import defaultdict
 
-def main() :
+dir = 'C:\\GitHub\\ExpertiseMapper\\Parser\\'
+raw = 'skills500.json'
+filename = 'skillTab.basket'
 
-    dir = 'C:\\GitHub\\ExpertiseMapper\\Parser\\'
-    raw = 'skills500.json'
-    filename = 'skillTab.basket'
+def main() :
     
     # filter out all skills that occur below this threshold
-    threshold = 3
+    threshold = 2
     # frequency of association
-    sup = 0.015
+    sup = 0.012
     
     os.chdir(dir)
     skills = Parser(dir, raw)
@@ -28,9 +28,9 @@ def main() :
     #printRules(rules)
     
     #generate node data struct with weights
-    nodes = generateNodes(skills, threshold)
+    #nodes = generateNodes(skills, threshold)
     #generate edge data struct with supp and conf from association rules
-    edges = generateEdges(data, itemsets)
+    nodes, edges = generateEdges(data, itemsets)
     exportToGML(nodes, edges)
     
 def generateNodes(s, t) :
@@ -47,24 +47,37 @@ def generateNodes(s, t) :
     
 def generateEdges(d, r) :
     
+    nodes = []
     edges = []
     length = len(d)
     for itemset, tids in r:
-        weight = len(tids)/float(length)
+        weight = len(tids)/float(length)*1000.0
+        #we only want support between 2 nodes
         if len(itemset) == 2 :
-            edges.append([d.domain[itemset[0]].name, d.domain[itemset[1]].name, weight])
+            nodes.append(d.domain[itemset[0]].name)
+            nodes.append(d.domain[itemset[1]].name)
+            edges.append((d.domain[itemset[0]].name, d.domain[itemset[1]].name, {"w": weight}))
         #print "%2.4f %s" % (len(tids)/float(len(d)),
         #" ".join(d.domain[item].name for item in itemset))
-    return edges
+    print edges
+    return nodes, edges
     
 
 def exportToGML(n, e) :
     
     G=nx.Graph()
     
-    for node in n :
-        G.add_node(node[0], frequency=node[1])
-    #print G.nodes()
+    #for node in n :
+        #G.add_node(node[0], frequency=node[1])
+        
+    G.add_nodes_from(n)
+    G.add_edges_from(e)
+    #print G.edges(data=True)
+    
+    graph = nx.generate_gml(G)
+    print graph
+    
+    nx.write_gml(G, dir + "test.gml")
 
 def populateTable(dir, s) :
     #save as tab
