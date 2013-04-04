@@ -1,5 +1,6 @@
-import os, json, re, orange, Orange
+import os, sys, json, re, orange, Orange
 from textProcessing import Parser
+import networkx as nx
 from pprint import *
 from collections import defaultdict
 
@@ -26,19 +27,30 @@ def main() :
     #printRules(rules)
     
     #generate node data struct with weights
-    generateNodes(skills, threshold)
+    nodes = generateNodes(skills, threshold)
     #generate edge data struct with supp and conf from association rules
     #generateEdges(skills, rules)
+    exportToGML(nodes)
     
 def generateNodes(s, t) :
     
     # an element is significant when count is above the threshold
     isSignificant = lambda elm: (elm[1] >= t)
     # apply threshold to list of elements and their counts
-    counts = filter(isSignificant,[(i, s.skillsList.count(i)) for i in s.skillsList])
+    counts = filter(isSignificant,[[i, s.skillsList.count(i)] for i in s.skillsList])
     
     #print pprint(counts)
-    print "number of significant nodes: " + str(len(counts))
+    #print "number of significant nodes: " + str(len(counts))
+    
+    return counts
+
+def exportToGML(n) :
+    
+    G=nx.Graph()
+    
+    for node in n :
+        G.add_node(node[0], frequency=node[1])
+    print G.nodes()
 
 def populateTable(dir, s) :
     #save as tab
