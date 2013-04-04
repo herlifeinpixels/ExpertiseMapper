@@ -22,15 +22,16 @@ def main() :
     data = orange.ExampleTable(filename)
     
     # Apply association rules
-    rules = orange.AssociationRulesSparseInducer(data, support = sup)
-    
+    rules = Orange.associate.AssociationRulesSparseInducer(support = sup, storeExamples = True)
+    itemsets = rules.get_itemsets(data)
+        
     #printRules(rules)
     
     #generate node data struct with weights
     nodes = generateNodes(skills, threshold)
     #generate edge data struct with supp and conf from association rules
-    #generateEdges(skills, rules)
-    exportToGML(nodes)
+    edges = generateEdges(data, itemsets)
+    exportToGML(nodes, edges)
     
 def generateNodes(s, t) :
     
@@ -43,14 +44,27 @@ def generateNodes(s, t) :
     #print "number of significant nodes: " + str(len(counts))
     
     return counts
+    
+def generateEdges(d, r) :
+    
+    edges = []
+    length = len(d)
+    for itemset, tids in r:
+        weight = len(tids)/float(length)
+        if len(itemset) == 2 :
+            edges.append([d.domain[itemset[0]].name, d.domain[itemset[1]].name, weight])
+        #print "%2.4f %s" % (len(tids)/float(len(d)),
+        #" ".join(d.domain[item].name for item in itemset))
+    return edges
+    
 
-def exportToGML(n) :
+def exportToGML(n, e) :
     
     G=nx.Graph()
     
     for node in n :
         G.add_node(node[0], frequency=node[1])
-    print G.nodes()
+    #print G.nodes()
 
 def populateTable(dir, s) :
     #save as tab
