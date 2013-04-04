@@ -5,33 +5,42 @@ from pprint import *
 from collections import defaultdict
 
 dir = 'C:\\GitHub\\ExpertiseMapper\\Parser\\'
-raw = 'skills500.json'
-filename = 'skillTab.basket'
+raw = 'skills5000'
+filename = 'skills.basket'
+output = '5000'
 
 def main() :
     
     # filter out all skills that occur below this threshold
     threshold = 2
     # frequency of association
-    sup = 0.012
+    sup = 0.003
     
     os.chdir(dir)
-    skills = Parser(dir, raw)
-    
-    #populateTable(dir + filename, skills)
-    data = orange.ExampleTable(filename)
-    
+	
+    fileList = ["skills5000", "skills5000_2", "skills5000_3", "skills5000_4", "skills5000_5", "skills5000_6", "skills5000_7", "skills5000_8", "skills5000_9", "skills5000_10", "skills5000_11", "skills5000_12"]
+
+    for file in fileList :
+        skills = Parser(dir, file + ".json")
+        populateTable(dir + filename, skills)
+'''
     # Apply association rules
-    rules = Orange.associate.AssociationRulesSparseInducer(support = sup, storeExamples = True)
-    itemsets = rules.get_itemsets(data)
-        
+    data = orange.ExampleTable(filename)
+    itemsets = associationRules(data, sup)
+
     #printRules(rules)
     
     #generate node data struct with weights
-    #nodes = generateNodes(skills, threshold)
     #generate edge data struct with supp and conf from association rules
     nodes, edges = generateEdges(data, itemsets)
     exportToGML(nodes, edges)
+'''
+
+def associationRules(data, sup) :
+    rules = Orange.associate.AssociationRulesSparseInducer(support = sup, storeExamples = True, maxItemSets=100000)
+    itemsets = rules.get_itemsets(data)
+    
+    return itemsets
     
 def generateNodes(s, t) :
     
@@ -59,9 +68,7 @@ def generateEdges(d, r) :
             edges.append((d.domain[itemset[0]].name, d.domain[itemset[1]].name, {"w": weight}))
         #print "%2.4f %s" % (len(tids)/float(len(d)),
         #" ".join(d.domain[item].name for item in itemset))
-    print edges
     return nodes, edges
-    
 
 def exportToGML(n, e) :
     
@@ -72,24 +79,26 @@ def exportToGML(n, e) :
         
     G.add_nodes_from(n)
     G.add_edges_from(e)
-    #print G.edges(data=True)
+    print len(G.edges())
     
     graph = nx.generate_gml(G)
     print graph
     
-    nx.write_gml(G, dir + "test.gml")
+    nx.write_gml(G, dir + output)
 
 def populateTable(dir, s) :
     #save as tab
     with open(dir, 'a') as file:
-        
         for i, key in enumerate(s.userSkills) :
             #u = ', '.join(sum((i.split() for i in s.userSkills[key]), [])) 
             u = ', '.join(s.userSkills[key])
+            file.write(u)
+            '''
             if (i+1) == len(s.userSkills):
                 file.write(u)
             else:
                 file.write(u + '\n')
+            '''
 
 def printRules(rules) :
 

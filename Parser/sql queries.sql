@@ -1,12 +1,7 @@
-SELECT s.id, s.source_json FROM main_skill s LIMIT 30
-source_json FROM main_workexperience
-
-
-SELECT s.id, s.source_json, e.source_json, FROM main_skill s,  main_workexperience e
-WHERE 
-
-
-SELECT e.user_id, s.source_json, e.source_json
-FROM main_skill s
-JOIN main_workexperience e ON s.user_id = e.user_id
-LIMIT 30
+SELECT  `user_id` , GROUP_CONCAT( source_json
+ORDER BY source_json DESC 
+SEPARATOR  ', ' ) AS  'user_skill'
+FROM main_skill
+WHERE  'user_skill' IS NOT NULL 
+GROUP BY  `user_id` 
+LIMIT 50

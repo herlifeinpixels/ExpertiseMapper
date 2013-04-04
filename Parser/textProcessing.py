@@ -20,7 +20,6 @@ class Parser:
         skills = defaultdict(list)
         skillsList = []
         num_parsed = 0
-
         #print json.loads(rdata[0][0])["user_skill"][0]["skill"]["name"]
         for row in rdata :
             try :
